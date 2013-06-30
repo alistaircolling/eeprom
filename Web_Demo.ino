@@ -141,9 +141,16 @@ void formCmd(WebServer &server, WebServer::ConnectionType type, char *url_tail, 
   if (str ==  "fname"){
     Serial.println("name--");
     Serial.println(value);
+    EEPROM_writeAnything(0, value);
+    delay(500);
+     EEPROM_readAnything(0, value);
+  Serial.println("eeprom value");
+  Serial.println(value);
 
   }
   
+  
+
   if (str ==  "passwd"){
     Serial.println("pass--");
     Serial.println(value);
@@ -186,10 +193,11 @@ void setup()
 //  webserver.addCommand("json", &jsonCmd);
   webserver.addCommand("form", &formCmd);
   Serial.begin(9600);
+  EEPROM_readAnything(0, value);
+  Serial.println("eeprom value");
+  Serial.println(value);
+  
 }
-
-
-
 
 
 
@@ -197,8 +205,10 @@ void loop()
 {
   // process incoming connections one at a time forever
   webserver.processConnection();
+ 
+ 
 
-  
+
 }
 
 
