@@ -130,17 +130,19 @@ void formCmd(WebServer &server, WebServer::ConnectionType type, char *url_tail, 
     do
     {
       repeat = server.readPOSTparam(name, 16, value, 16);
-          Serial.print(":"+repeat);
-          Serial.print("nom:"+name);
+    String str(name);
+    String val(value);
 
-      if (name[0] == 'd')
-      {
-        int pin = strtoul(name + 1, NULL, 10);
-        int val = strtoul(value, NULL, 10);
-        digitalWrite(pin, val);
-      }
+  if (str ==  "fname"){
+    Serial.println("name--");
+    Serial.println(value);
+  }
+  
+  if (str ==  "passwd"){
+    Serial.println("pass--");
+    Serial.println(value);
+  }
     } while (repeat);
-
     server.httpSeeOther(PREFIX "/form");
   }
   else
