@@ -25,6 +25,7 @@
 #include "Ethernet.h"
 #include "WebServer.h"
 #include "EEPROM.h"
+#include "EEPROMAnything.h"
 
 // no-cost stream operator as described at 
 // http://sundial.org/arduino/?page_id=119
@@ -196,48 +197,8 @@ void loop()
   // process incoming connections one at a time forever
   webserver.processConnection();
 
-  // if you wanted to do other work based on a connecton, it would go here
-  
-  ////READING EEPROM
-  
-   value = EEPROM.read(address);
-  
-  Serial.print(address);
-  Serial.print("\t");
-  Serial.print(value, DEC);
-  Serial.println();
-  
-  // advance to the next address of the EEPROM
-  address = address + 1;
-  
-  // there are only 512 bytes of EEPROM, from 0 to 511, so if we're
-  // on address 512, wrap around to address 0
-  if (address == 512)
-    address = 0;
-    
-  delay(500);
   
   
-  /////EERPROM
-    // need to divide by 4 because analog inputs range from
-  // 0 to 1023 and each byte of the EEPROM can only hold a
-  // value from 0 to 255.
-  int val = 7;
-  /*
-  // write the value to the appropriate byte of the EEPROM.
-  // these values will remain there when the board is
-  // turned off.
-  EEPROM.write(addr, val);
-  
-  // advance to the next address.  there are 512 bytes in 
-  // the EEPROM, so go back to 0 when we hit 512.
-  addr = addr + 1;
-  if (addr == 512)
-    addr = 0;
-  
-  delay(100);
-  
-  */
 }
 
 
