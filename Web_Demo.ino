@@ -121,23 +121,27 @@ void outputPins(WebServer &server, WebServer::ConnectionType type, bool addContr
   server << "</body></html>";
 }
 
+
+char name[32], value[32];
+
 void formCmd(WebServer &server, WebServer::ConnectionType type, char *url_tail, bool tail_complete)
 {
     Serial.println("form cmd");
   if (type == WebServer::POST)
   {
     bool repeat;
-    char name[16], value[16];
+//    char name[32], value[32];
 
     do
     {
-      repeat = server.readPOSTparam(name, 16, value, 16);
+      repeat = server.readPOSTparam(name, 32, value, 32);
     String str(name);
     String val(value);
 
   if (str ==  "fname"){
     Serial.println("name--");
     Serial.println(value);
+
   }
   
   if (str ==  "passwd"){
@@ -186,10 +190,7 @@ void setup()
 
 
 
-/////////EEPROM
-byte value;
-int addr = 0;
-int address = 0;
+
 
 
 void loop()
@@ -197,7 +198,6 @@ void loop()
   // process incoming connections one at a time forever
   webserver.processConnection();
 
-  
   
 }
 
