@@ -145,6 +145,7 @@ void formCmd(WebServer &server, WebServer::ConnectionType type, char *url_tail, 
   }
     } while (repeat);
     server.httpSeeOther(PREFIX "/form");
+  
   }
   else
     outputPins(server, type, true);
@@ -188,7 +189,7 @@ void setup()
 byte value;
 int addr = 0;
 int address = 0;
-char[]
+
 
 void loop()
 {
