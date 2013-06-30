@@ -84,7 +84,7 @@ void outputPins(WebServer &server, WebServer::ConnectionType type, bool addContr
   P(htmlHead) =
     "<html>"
     "<head>"
-    "<title>Arduino Web Server</title>"
+    "<title>Enter your WiFi Details</title>"
     "<style type=\"text/css\">"
     "BODY { font-family: sans-serif }"
     "H1 { font-size: 14pt; text-decoration: underline }"
@@ -100,29 +100,11 @@ void outputPins(WebServer &server, WebServer::ConnectionType type, bool addContr
   if (addControls)
     server << "<form action='" PREFIX "/form' method='post'>";
 
-  server << "<h1>Digital Pins</h1><p>";
+  server << "<h1>Network SSID</h1><p>";
+  server << "<input type='text' name='fname'>";
+  
 
-  for (i = 0; i <= 9; ++i)
-  {
-    // ignore the pins we use to talk to the Ethernet chip
-    int val = digitalRead(i);
-    server << "Digital " << i << ": ";
-    if (addControls)
-    {
-      char pinName[4];
-      pinName[0] = 'd';
-      itoa(i, pinName + 1, 10);
-      server.radioButton(pinName, "1", "On", val);
-      server << " ";
-      server.radioButton(pinName, "0", "Off", !val);
-    }
-    else
-      server << (val ? "HIGH" : "LOW");
-
-    server << "<br/>";
-  }
-
-  server << "</p><h1>Analog Pins</h1><p>";
+  server << "</p><h1>Password</h1><p>";
   for (i = 0; i <= 5; ++i)
   {
     int val = analogRead(i);
@@ -131,7 +113,7 @@ void outputPins(WebServer &server, WebServer::ConnectionType type, bool addContr
 
   server << "</p>";
 
-  if (addControls)
+
     server << "<input type='submit' value='Submit'/></form>";
 
   server << "</body></html>";
@@ -176,7 +158,7 @@ void setup()
   webserver.begin();
 
   webserver.setDefaultCommand(&defaultCmd);
-  webserver.addCommand("json", &jsonCmd);
+//  webserver.addCommand("json", &jsonCmd);
   webserver.addCommand("form", &formCmd);
 }
 
