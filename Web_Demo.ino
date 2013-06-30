@@ -47,6 +47,9 @@ WebServer webserver(PREFIX, 80);
 
 void jsonCmd(WebServer &server, WebServer::ConnectionType type, char *url_tail, bool tail_complete)
 {
+  
+  Serial.println("jsoncmd");
+  
   if (type == WebServer::POST)
   {
     server.httpFail();
@@ -81,6 +84,8 @@ void jsonCmd(WebServer &server, WebServer::ConnectionType type, char *url_tail, 
 
 void outputPins(WebServer &server, WebServer::ConnectionType type, bool addControls = false)
 {
+  
+      Serial.println("foutput pins");
   P(htmlHead) =
     "<html>"
     "<head>"
@@ -105,14 +110,9 @@ void outputPins(WebServer &server, WebServer::ConnectionType type, bool addContr
   
 
   server << "</p><h1>Password</h1><p>";
-  for (i = 0; i <= 5; ++i)
-  {
-    int val = analogRead(i);
-    server << "Analog " << i << ": " << val << "<br/>";
-  }
+  server << "<input type='text' name='passwd'>";
 
   server << "</p>";
-
 
     server << "<input type='submit' value='Submit'/></form>";
 
@@ -121,13 +121,18 @@ void outputPins(WebServer &server, WebServer::ConnectionType type, bool addContr
 
 void formCmd(WebServer &server, WebServer::ConnectionType type, char *url_tail, bool tail_complete)
 {
+    Serial.println("form cmd");
   if (type == WebServer::POST)
   {
     bool repeat;
     char name[16], value[16];
+
     do
     {
       repeat = server.readPOSTparam(name, 16, value, 16);
+          Serial.print(":"+repeat);
+          Serial.print("nom:"+name);
+
       if (name[0] == 'd')
       {
         int pin = strtoul(name + 1, NULL, 10);
@@ -144,6 +149,8 @@ void formCmd(WebServer &server, WebServer::ConnectionType type, char *url_tail, 
 
 void defaultCmd(WebServer &server, WebServer::ConnectionType type, char *url_tail, bool tail_complete)
 {
+
+    Serial.println("def cmd");
   outputPins(server, type, false);  
 }
 
@@ -160,6 +167,7 @@ void setup()
   webserver.setDefaultCommand(&defaultCmd);
 //  webserver.addCommand("json", &jsonCmd);
   webserver.addCommand("form", &formCmd);
+  Serial.begin(9600);
 }
 
 void loop()
