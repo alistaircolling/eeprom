@@ -44,6 +44,10 @@ static uint8_t ip[] = { 192, 168, 1, 210 };
 
 WebServer webserver(PREFIX, 80);
 
+String ssidName;
+String ssidPass;
+
+
 // commands are functions that get called by the webserver framework
 // they can read any posted data from client, and they output to server
 
@@ -103,7 +107,7 @@ void outputPins(WebServer &server, WebServer::ConnectionType type, bool addContr
   int i;
   server.httpSuccess();
   server.printP(htmlHead);
-
+  
   if (addControls)
     server << "<form action='" PREFIX "/form' method='post'>";
 
@@ -117,7 +121,10 @@ void outputPins(WebServer &server, WebServer::ConnectionType type, bool addContr
   server << "</p>";
 
     server << "<input type='submit' value='Submit'/></form>";
-
+    server << "</p><h1>Stored SSID</h1><p>";
+    server << "<p>"+ssidName+"</p>";
+    server << "</p><h1>Stored Password</h1><p>";
+    server << "<p>"+ssidPass+"</p>";    
   server << "</body></html>";
 }
 
@@ -146,8 +153,6 @@ void formCmd(WebServer &server, WebServer::ConnectionType type, char *url_tail, 
 
   }
   
-  
-
   if (str ==  "passwd"){
     Serial.println("pass--");
     Serial.println(value);
@@ -170,8 +175,6 @@ void defaultCmd(WebServer &server, WebServer::ConnectionType type, char *url_tai
 }
 
 
-
-
 void setup()
 {
   // set pins 0-8 for digital input
@@ -179,20 +182,24 @@ void setup()
     pinMode(i, INPUT);
   pinMode(9, OUTPUT);
 
+  Serial.begin(9600);
+  EEPROM_readAnything(0, value);
+  ssidName = value;
+  delay(200);
+  EEPROM_readAnything(33, name);
+  ssidPass = name;
+  delay(200);
+  
+  Serial.println(ssidName);
+  Serial.println(ssidPass);  
+
   Ethernet.begin(mac, ip);
   webserver.begin();
 
   webserver.setDefaultCommand(&defaultCmd);
 //  webserver.addCommand("json", &jsonCmd);
   webserver.addCommand("form", &formCmd);
-  Serial.begin(9600);
-  EEPROM_readAnything(0, value);
-  Serial.println("eeprom value");
-  Serial.println(value);
-  delay(200);
-  EEPROM_readAnything(33, name);
-  Serial.println("eeprom name");
-  Serial.println(name);
+ 
   
 }
 
