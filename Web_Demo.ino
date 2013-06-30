@@ -143,9 +143,6 @@ void formCmd(WebServer &server, WebServer::ConnectionType type, char *url_tail, 
     Serial.println(value);
     EEPROM_writeAnything(0, value);
     delay(500);
-     EEPROM_readAnything(0, value);
-  Serial.println("eeprom value");
-  Serial.println(value);
 
   }
   
@@ -154,6 +151,8 @@ void formCmd(WebServer &server, WebServer::ConnectionType type, char *url_tail, 
   if (str ==  "passwd"){
     Serial.println("pass--");
     Serial.println(value);
+    EEPROM_writeAnything(33, value);
+    delay(500);
   }
     } while (repeat);
     server.httpSeeOther(PREFIX "/form");
@@ -170,13 +169,7 @@ void defaultCmd(WebServer &server, WebServer::ConnectionType type, char *url_tai
   outputPins(server, type, false);  
 }
 
-void EEPROM_write(int data, byte datasize) {
-   int addr = 0;
-   EEPROM.write(addr++, datasize);
-   for (int i=0; i<datasize; i++) {
-      EEPROM.write(addr, data);
-   }
-}
+
 
 
 void setup()
@@ -196,6 +189,10 @@ void setup()
   EEPROM_readAnything(0, value);
   Serial.println("eeprom value");
   Serial.println(value);
+  delay(200);
+  EEPROM_readAnything(33, name);
+  Serial.println("eeprom name");
+  Serial.println(name);
   
 }
 
