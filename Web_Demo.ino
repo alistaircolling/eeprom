@@ -165,13 +165,15 @@ void formCmd(WebServer &server, WebServer::ConnectionType type, char *url_tail, 
   }
   else
     outputPins(server, type, true);
+    
+    //software_Reset();
 }
 
 void defaultCmd(WebServer &server, WebServer::ConnectionType type, char *url_tail, bool tail_complete)
 {
 
     Serial.println("def cmd");
-  outputPins(server, type, false);  
+    outputPins(server, type, false);  
 }
 
 
@@ -202,7 +204,10 @@ void setup()
  
   
 }
-
+void software_Reset() // Restarts program from beginning but does not reset the peripherals and registers
+{
+  asm volatile ("  jmp 0");  
+} 
 
 
 void loop()
